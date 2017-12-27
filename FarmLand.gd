@@ -4,7 +4,7 @@ var GRASS_CELL_TYPE = 0
 var FERTILE_CELL_TYPE = 1
 var PLANTED_CELL_TYPE = 2
 
-var tournesol = load("res://Tournesol.tscn")
+var tournesol = load("res://GreenyBitch.tscn")
 
 # 0 is none
 # 1 is tilemap
