@@ -6,28 +6,25 @@ var PLANTED_CELL_TYPE = 2
 
 var tournesol = load("res://GreenyBitch.tscn")
 
-# 0 is none
-# 1 is tilemap
-# 2 is plants
-var which_input = 0
 var wait_mouse_up = false
 
 var player_money = 0
 
 func set_player_money( new_value ):
 	player_money = new_value
-	get_node( "../Camera/UI/PlayerMoneyValue" ).set_text( "Player money: %d" % player_money )
+	get_node( "../Camera/UI/Stats/PlayerMoneyValue" ).set_text( "Player money: %d" % player_money )
 
 func _ready():
-	set_process( true )
+	# set_process( true )
+	pass
 	
-func spawn_plant_at( map_pos ):
-	var inst = tournesol.instance()
+func spawn_plant_at( plant, map_pos ):
+	var inst = plant.instance()
 	var cell_size = get_cell_size()
 	var new_pos = map_to_world( map_pos ) + cell_size / 2
 	inst.set_pos( new_pos )
 
-	var plants_node = get_node( "../Plants" )
+	var plants_node = get_node( "/root/Root/Plants" )
 	plants_node.add_child( inst )
 
 	set_cell( map_pos.x, map_pos.y, PLANTED_CELL_TYPE )
@@ -51,6 +48,7 @@ func on_click_plant( plant ):
 		remove_plant( plant )
 
 func _process( delta ):
+	
 	if !wait_mouse_up and Input.is_mouse_button_pressed( BUTTON_LEFT ):
 		var mouse_pos = get_global_mouse_pos()
 		# check if we hit some plant

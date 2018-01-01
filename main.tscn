@@ -1,10 +1,47 @@
-[gd_scene load_steps=6 format=1]
+[gd_scene load_steps=20 format=1]
 
 [ext_resource path="res://farm_tileset.tres" type="TileSet" id=1]
 [ext_resource path="res://FarmLand.gd" type="Script" id=2]
 [ext_resource path="res://MouseCursorScript.gd" type="Script" id=3]
 [ext_resource path="res://MouseCursor.png" type="Texture" id=4]
-[ext_resource path="res://ControllerScript.gd" type="Script" id=5]
+[ext_resource path="res://Player.gd" type="Script" id=5]
+[ext_resource path="res://Inventory.gd" type="Script" id=6]
+[ext_resource path="res://ControllerScript.gd" type="Script" id=7]
+[ext_resource path="res://InventorySlot.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Hoe.gd" type="Script" id=9]
+[ext_resource path="res://Hoe.tres" type="Texture" id=10]
+[ext_resource path="res://SunFlowerSeed.gd" type="Script" id=11]
+[ext_resource path="res://SunFlowerSeed.tres" type="Texture" id=12]
+[ext_resource path="res://Tournesol.tscn" type="PackedScene" id=13]
+[ext_resource path="res://TileSet.png" type="Texture" id=14]
+[ext_resource path="res://GreenyBitch.tscn" type="PackedScene" id=15]
+
+[sub_resource type="StyleBoxEmpty" id=1]
+
+content_margin/left = -1.0
+content_margin/right = -1.0
+content_margin/top = -1.0
+content_margin/bottom = -1.0
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+content_margin/left = -1.0
+content_margin/right = -1.0
+content_margin/top = -1.0
+content_margin/bottom = -1.0
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+content_margin/left = -1.0
+content_margin/right = -1.0
+content_margin/top = -1.0
+content_margin/bottom = -1.0
+
+[sub_resource type="AtlasTexture" id=4]
+
+atlas = ExtResource( 14 )
+region = Rect2( 64, 128, 32, 32 )
+margin = Rect2( 0, 0, 0, 0 )
 
 [node name="Root" type="Node2D"]
 
@@ -34,17 +71,25 @@ script/script = ExtResource( 2 )
 [node name="MouseCursor" type="Node2D" parent="."]
 
 script/script = ExtResource( 3 )
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="Sprite" type="Sprite" parent="MouseCursor"]
 
 texture = ExtResource( 4 )
 
+[node name="Player" type="Node2D" parent="."]
+
+script/script = ExtResource( 5 )
+
+[node name="Inventory" type="Node2D" parent="Player"]
+
+script/script = ExtResource( 6 )
+inventory_ui_path = NodePath("../../Camera/UI/InventorySlots")
+item_database_path = NodePath("../../ItemDatabase")
+
 [node name="Camera" type="Camera2D" parent="."]
 
-transform/pos = Vector2( 280.757, 171.652 )
+editor/display_folded = true
+transform/pos = Vector2( 273.674, 179.192 )
 anchor_mode = 1
 rotating = false
 current = true
@@ -61,7 +106,10 @@ drag_margin/left = 0.2
 drag_margin/top = 0.2
 drag_margin/right = 0.2
 drag_margin/bottom = 0.2
-script/script = ExtResource( 5 )
+script/script = ExtResource( 7 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="UI" type="Panel" parent="Camera"]
 
@@ -69,24 +117,111 @@ focus/ignore_mouse = false
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 2
-margin/left = 100.0
-margin/top = -136.0
-margin/right = 247.0
-margin/bottom = -47.0
+margin/left = -254.0
+margin/top = -148.0
+margin/right = 252.0
+margin/bottom = 147.0
+custom_styles/panelf = SubResource( 1 )
+custom_styles/panel = SubResource( 2 )
+custom_styles/panelnc = SubResource( 3 )
 
-[node name="PlayerMoneyValue" type="Label" parent="Camera/UI"]
+[node name="Stats" type="Panel" parent="Camera/UI"]
+
+editor/display_folded = true
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 357.0
+margin/top = 5.0
+margin/right = 503.0
+margin/bottom = 43.0
+
+[node name="PlayerMoneyValue" type="Label" parent="Camera/UI/Stats"]
 
 focus/ignore_mouse = true
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
-margin/left = 6.0
-margin/top = 8.0
-margin/right = 109.0
-margin/bottom = 22.0
+margin/left = 11.0
+margin/top = 10.0
+margin/right = 114.0
+margin/bottom = 24.0
 text = "Player money: 0"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
+
+[node name="InventorySlots" type="GridContainer" parent="Camera/UI"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 161.0
+margin/top = 254.0
+margin/right = 373.0
+margin/bottom = 288.0
+columns = 6
+
+[node name="InventorySlot0" parent="Camera/UI/InventorySlots" instance=ExtResource( 8 )]
+
+anchor/right = 0
+anchor/bottom = 0
+margin/right = 32.0
+margin/bottom = 32.0
+
+[node name="InventorySlot1" parent="Camera/UI/InventorySlots" instance=ExtResource( 8 )]
+
+anchor/right = 0
+anchor/bottom = 0
+margin/left = 36.0
+margin/right = 68.0
+margin/bottom = 32.0
+
+[node name="InventorySlot2" parent="Camera/UI/InventorySlots" instance=ExtResource( 8 )]
+
+anchor/right = 0
+anchor/bottom = 0
+margin/left = 72.0
+margin/right = 104.0
+margin/bottom = 32.0
+
+[node name="InventorySlot3" parent="Camera/UI/InventorySlots" instance=ExtResource( 8 )]
+
+anchor/right = 0
+anchor/bottom = 0
+margin/left = 108.0
+margin/right = 140.0
+margin/bottom = 32.0
+
+[node name="InventorySlot4" parent="Camera/UI/InventorySlots" instance=ExtResource( 8 )]
+
+anchor/right = 0
+anchor/bottom = 0
+margin/left = 144.0
+margin/right = 176.0
+margin/bottom = 32.0
+
+[node name="ItemDatabase" type="Node2D" parent="."]
+
+[node name="Hoe" type="Node2D" parent="ItemDatabase"]
+
+visibility/visible = false
+script/script = ExtResource( 9 )
+sprite = ExtResource( 10 )
+
+[node name="SunFlowerSeed" type="Node2D" parent="ItemDatabase"]
+
+visibility/visible = false
+script/script = ExtResource( 11 )
+sprite = ExtResource( 12 )
+plant = ExtResource( 13 )
+
+[node name="GreenyBitch" type="Node2D" parent="ItemDatabase"]
+
+script/script = ExtResource( 11 )
+sprite = SubResource( 4 )
+plant = ExtResource( 15 )
 
 
