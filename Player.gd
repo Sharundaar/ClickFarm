@@ -21,14 +21,14 @@ func get_money():
 
 func _ready():
 	var item_database = get_node( "/root/Root/ItemDatabase" )
-	for item in item_database.get_children():
-		if item.get_name() == "SunFlowerSeed":
-			inventory.add_item( item, 10 )
-			inventory.add_item( item, 10 )
-		elif item.consumable:
-			inventory.add_item( item, 20 )
+	for item_template in item_database.get_children():
+		if item_template.get_name() == "SunFlowerSeed":
+			inventory.add_item( item_template, 10 )
+			inventory.add_item( item_template, 10 )
+		elif item_template.consumable:
+			inventory.add_item( item_template, 20 )
 		else:
-			inventory.add_item( item )
+			inventory.add_item( item_template )
 	
 	set_process_input( true )
 	set_process( true )
@@ -79,9 +79,7 @@ func _process( delta ):
 	
 	# Update stats
 	var mouse_pos = get_global_mouse_pos()
-	var hit = get_world_2d().get_direct_space_state().intersect_point( mouse_pos, 1 )
-	if hit.size() > 0:
-		var plant = hit[0].collider.get_parent()
-		stats_node.get_node( "PlantWaterValue" ).set_text( "Plant Water: %.2f" % plant.water )
-	else:
-		stats_node.get_node( "PlantWaterValue" ).set_text( "Plant Water: N/A" )
+	var map_coord = tile_map.world_to_map( mouse_pos )
+	var cell_data = tile_map.get_cell_data( map_coord )
+	stats_node.get_node( "SoilWaterValue" ).set_text( "Soil Water: %.2f" % cell_data.water )
+	stats_node.get_node( "SoilQualityValue" ).set_text( "Soil Quality: %.2f" % cell_data.quality )

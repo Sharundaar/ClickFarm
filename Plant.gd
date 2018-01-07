@@ -7,15 +7,20 @@ export(int)   var VALUE = 5
 var stage = 0
 var time  = 0
 
-var water = 100
 var water_consumption_rate  = 5
 var water_thirst_threashold = 25
 
 var thirst_indicator = preload( "res://thirst_indicator.tres" )
 var thirst_indicator_instance = null
 
+var cell_data = null
+
 func _ready():
 	set_process( true )
+	
+	var tileMap = get_node( "/root/Root/TileMap" )
+	var map_coord = tileMap.world_to_map( get_pos() )
+	cell_data = tileMap.get_cell_data( map_coord )
 
 func on_stage_change( old_stage, new_stage ):
 	if new_stage < STAGE_COUNT:
@@ -33,8 +38,8 @@ func _process(delta):
 			stage = old_stage + 1
 			on_stage_change( old_stage, stage )
 	
-	water -= water_consumption_rate * delta
-	if water < water_thirst_threashold:
+	cell_data.water -= water_consumption_rate * delta
+	if cell_data.water < water_thirst_threashold:
 		if not thirst_indicator_instance:
 			thirst_indicator_instance = Sprite.new()
 			thirst_indicator_instance.set_texture( thirst_indicator )
@@ -47,5 +52,5 @@ func _process(delta):
 			thirst_indicator_instance.queue_free()
 			thirst_indicator_instance = null
 			
-	if water < 0:
-		water = 0
+	if cell_data.water < 0:
+		cell_data.water = 0
